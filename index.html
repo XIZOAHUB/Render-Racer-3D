@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High-Performance 3D Arcade Racer</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #050505;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+        }
+
+        #canvas-container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        /* HUD Overlay */
+        #hud {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            display: flex;
+            align-items: flex-end;
+            gap: 40px;
+            pointer-events: none;
+        }
+
+        .hud-panel {
+            background: rgba(0, 0, 0, 0.75);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            color: #fff;
+            text-align: center;
+        }
+
+        /* Speedometer */
+        .speed-container {
+            min-width: 120px;
+        }
+        #speed-val {
+            font-size: 3rem;
+            font-weight: 800;
+            font-family: monospace;
+            line-height: 1;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+        .speed-unit {
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            color: #888;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        /* Nitro Bar */
+        .nitro-container {
+            width: 200px;
+        }
+        .nitro-label {
+            font-size: 0.75rem;
+            letter-spacing: 1.5px;
+            color: #00d2ff;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(0, 210, 255, 0.5);
+        }
+        .nitro-bar-bg {
+            width: 100%;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        #nitro-fill {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #0055ff, #00d2ff);
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.8);
+            border-radius: 6px;
+            transition: width 0.05s linear;
+        }
+
+        /* Instructions */
+        #instructions {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            color: rgba(255, 255, 255, 0.7);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            border-left: 3px solid #00d2ff;
+            pointer-events: none;
+        }
+        #instructions h3 {
+            margin: 0 0 8px 0;
+            color: #fff;
+            font-size: 1rem;
+        }
+    </style>
+
+    <!-- Import Map for handling bare module specifiers -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
+          "cannon-es": "https://unpkg.com/cannon-es@0.20.0/dist/cannon-es.js"
+        }
+      }
+    </script>
+</head>
+<body>
+    <div id="instructions">
+        <h3>Controls</h3>
+        W / S or Up / Down : Accelerate / Brake<br>
+        A / D or Left / Right : Steering<br>
+        Spacebar : Handbrake / Drift<br>
+        Left Shift : Nitro Boost
+    </div>
+
+    <div id="canvas-container"></div>
+
+    <div id="hud">
+        <div class="hud-panel speed-container">
+            <div id="speed-val">0</div>
+            <div class="speed-unit">KM/H</div>
+        </div>
+        <div class="hud-panel nitro-container">
+            <div class="nitro-label">Nitro Boost</div>
+            <div class="nitro-bar-bg">
+                <div id="nitro-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { Game } from './js/Game.js';
+        
+        // Initialize the game engine
+        window.addEventListener('DOMContentLoaded', () => {
+            const game = new Game();
+            game.init();
+        });
+    </script>
+</body>
+</html>
